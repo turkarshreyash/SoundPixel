@@ -1,7 +1,7 @@
 /**
  * turkarshreyash@gmail.com
  * 
- * Copyleft (c) 2022 Innovation Eternity.
+ * Copyright (c) 2022 Innovation Eternity.
  * 
  */
 
