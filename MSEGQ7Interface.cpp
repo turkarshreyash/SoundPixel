@@ -7,9 +7,9 @@
 
 #include"MSEGQ7Interface.hpp"
 
-// Don't change calibrated on: 20 January 2022.
-uint16_t MSGEQ7Interface::read_cutoff[7] = {125,150,150,160,225,360,1023};
-uint16_t MSGEQ7Interface::final_cutoff[7] = {160,100,120,120,160,200,1023};
+// Should be calibrated according to use.
+uint16_t MSGEQ7Interface::read_cutoff[7] = {260, 260, 260, 260, 260, 260, 260};
+uint16_t MSGEQ7Interface::final_cutoff[7] = {0, 0, 0, 0, 0, 0, 0};
 
 /**
  * @brief Construct a new msgeq7 interface::msgeq7 interface object
@@ -38,6 +38,7 @@ void MSGEQ7Interface::setup(){
   ARDUINO_SET_INPUT(this->analogin_pin);
   ARDUINO_SET_OUTPUT(this->reset_pin);
   ARDUINO_SET_OUTPUT(this->strobe_pin);
+
   ARDUINO_LOW(this->reset_pin);
   ARDUINO_HIGH(this->strobe_pin);
 }
@@ -49,6 +50,7 @@ void MSGEQ7Interface::setup(){
 inline void MSGEQ7Interface::read_ready(){
   ARDUINO_HIGH(this->reset_pin);
   ARDUINO_DELAY_USECS(MSGEQ7_RESET_PULSE_WIDTH_US);
+
   ARDUINO_LOW(this->reset_pin);
   ARDUINO_DELAY_USECS(MSGEQ7_RESET_TO_STROBE_DELAY_US);
 }
@@ -59,11 +61,15 @@ inline void MSGEQ7Interface::read_ready(){
  * @return uint16_t
  */
 inline uint16_t MSGEQ7Interface::read_analog_in(){
+
   ARDUINO_DELAY_USECS(MSGEQ7_STROBE_TO_STROBE_DELAY_US);
   ARDUINO_LOW(this->strobe_pin);
   ARDUINO_DELAY_USECS(MSGEQ7_OUTPUT_SETTLE_TIME_US);
+
   uint16_t analog_value = ARDUINO_READ(this->analogin_pin);
+
   ARDUINO_HIGH(this->strobe_pin);
+
   return analog_value;
 }
 
